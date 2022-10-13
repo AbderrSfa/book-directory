@@ -13,11 +13,9 @@ const client = new Client({
 
 const initDB = async () => {
 	client.connect();
-	client.query('DROP DATABASE IF EXISTS booksdirectory');
-	client.query('CREATE DATABASE booksdirectory;');
-
+	client.query('DROP TABLE IF EXISTS books');	
 	const sqlQueries = await fs.readFile(dbPath, 'utf-8');
 	client.query(sqlQueries);
 };
 
-export {initDB, client};
+export { initDB, client };
