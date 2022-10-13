@@ -3,7 +3,9 @@ const app = express();
 const port = 4040;
 import booksRouter from './routes/books';
 import { initDB, client } from './db/database';
+import cors from 'cors';
 
+app.use(cors());
 app.use(express.json());
 app.use('/api/books', booksRouter);
 
