@@ -6,7 +6,7 @@ type Props = {
 };
 
 const Book = ({ book }: Props) => {
-  const { id, author, genre, image, isbn, rating, title } = book;
+  const { author, genre, image, isbn, rating, title } = book;
   return (
     <article className="my-4 flex w-max min-w-max gap-4 rounded-lg bg-white p-4 drop-shadow-md">
       <Image src={image} width={92} height={150} />

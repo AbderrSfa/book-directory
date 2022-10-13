@@ -1,21 +1,28 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 import BooksList from "../components/BooksList";
-import fetchBooks from "../helpers/fetchBooks";
+import getData from "../helpers/fetchBooks";
 
 import BookT from "../typings/Book";
 
 const Home: NextPage = () => {
   const [booksList, setBooksList] = useState<BookT[]>([]);
+  const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    async function getBooks() {
-      setBooksList(await fetchBooks());
+  const showAllBooks = async () => {
+    setBooksList(await getData("http://localhost:4040/api/books/"));
+  };
+
+  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if (value.length < 2) setBooksList([]);
+    if (value.length > 2) {
+      setBooksList(await getData(`http://localhost:4040/api/books/${value}`));
     }
-    getBooks();
-  }, []);
+    setSearch(value);
+  };
 
   return (
     <>
@@ -27,19 +34,24 @@ const Home: NextPage = () => {
 
       <main className="h-screen w-screen px-20">
         <section className="">
-          <h1 className="font-['Playfair Display'] my-8 text-center text-4xl font-bold capitalize">
-            book directory
-          </h1>
-          <button className="m-auto my-4 block rounded-lg bg-[#553b08] py-2 px-4 text-white">
-            show all books
-          </button>
-          <form className="m-auto">
+          <div className="text-center">
+            <h1 className="font-['Playfair Display'] my-8 text-4xl font-bold capitalize">
+              book directory
+            </h1>
+            <button
+              className="m-auto my-4 block rounded-lg bg-[#553b08] py-2 px-4 text-white"
+              onClick={showAllBooks}
+            >
+              show all books
+            </button>
             <input
               type="text"
+              value={search}
               placeholder="search for a book..."
-              className="m-auto rounded-lg p-4"
+              className="w-1/3 rounded-lg p-4"
+              onChange={handleChange}
             />
-          </form>
+          </div>
           <BooksList booksList={booksList} />
         </section>
       </main>

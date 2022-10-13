@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const fetchBooks = async () => {
+const getData = async (url:string) => {
   try {
-    const res = await axios.get("http://localhost:4040/api/books");
+    const res = await axios.get(url);
     return res.data.data;
   } catch (error) {
 		console.log(error);
   }
 };
 
-export default fetchBooks;
+export default getData;
