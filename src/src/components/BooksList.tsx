@@ -7,11 +7,11 @@ type Props = {
 
 const BooksList = ({ booksList }: Props) => {
   return (
-    <div className="">
+    <section>
       {booksList.map((book) => {
 				return <Book book={book} key={book.id} />;
       })}
-    </div>
+    </section>
   );
 };
 
