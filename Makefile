@@ -9,8 +9,8 @@ all: credit build
 
 build:
 	@echo "$(GREEN)█████████████████████████ Running db container ████████████████████████████$(RESET)"
-	@docker stop postgres_db
-	@docker rm postgres_db
+	@docker stop postgres_db || true
+	@docker rm postgres_db || true
 	@docker pull postgres
 	@docker run -e POSTGRES_PASSWORD=postgres -d -p 5432:5432 --name postgres_db postgres
 	@echo "$(GREEN)█████████████████████████ Running backend ████████████████████████████$(RESET)"
