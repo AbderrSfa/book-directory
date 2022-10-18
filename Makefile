@@ -19,9 +19,9 @@ build:
 	@cd src; npm install; npm run build
 
 down:
-	@echo "$(BLUE)█████████████████████████ Running frontend ████████████████████████████$(RESET)"
-	@docker stop postgres_db
-	@docker rm postgres_db
+	@echo "$(RED)█████████████████████████ Deleting db ████████████████████████████$(RESET)"
+	@docker stop postgres_db || true
+	@docker rm postgres_db ||true
 
 credit:
 	@echo "$(YELLOW)████████████████████████ Book Directory ███████████████████████████$(RESET)"
