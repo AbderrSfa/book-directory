@@ -12,15 +12,10 @@ import BookT from "../typings/Book";
 import fetchBooks from "../helpers/fetchBooks";
 import AllBooks from "../components/AllBooks";
 
-
 const Home: NextPage = () => {
   const [booksList, setBooksList] = useState<BookT[]>([]);
   const [search, setSearch] = useState("");
-
-
-  // const showAllBooks = async () => {
-  //   setBooksList(await getData("http://localhost:4040/api/books/"));
-  // };
+  const [showAll, setShowAll] = useState(false);
 
   // useEffect(() => {
   //   async function getBooks() {
@@ -32,6 +27,7 @@ const Home: NextPage = () => {
   //   }
   //   getBooks();
   // }, [search]);
+
   return (
     <>
       <Head>
@@ -58,7 +54,7 @@ const Home: NextPage = () => {
             </h1>
             <button
               className="m-auto my-4 block rounded-lg bg-[#553b08] py-2 px-4 text-white"
-              // onClick={showAllBooks}
+              onClick={() => setShowAll(true)}
             >
               show all books
             </button>
@@ -71,7 +67,7 @@ const Home: NextPage = () => {
             />
           </div>
         </section>
-        <AllBooks />
+        {showAll && <AllBooks />}
       </main>
     </>
   );
