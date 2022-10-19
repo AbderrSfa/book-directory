@@ -8,14 +8,15 @@ import BooksList from "../components/BooksList";
 import { useQuery } from "react-query";
 
 import BookT from "../typings/Book";
-import axios from "axios";
 
 import fetchBooks from "../helpers/fetchBooks";
+import AllBooks from "../components/AllBooks";
+
 
 const Home: NextPage = () => {
   const [booksList, setBooksList] = useState<BookT[]>([]);
   const [search, setSearch] = useState("");
-  const { isLoading, data } = useQuery("book-list", fetchBooks);
+
 
   // const showAllBooks = async () => {
   //   setBooksList(await getData("http://localhost:4040/api/books/"));
@@ -31,7 +32,6 @@ const Home: NextPage = () => {
   //   }
   //   getBooks();
   // }, [search]);
-
   return (
     <>
       <Head>
@@ -71,15 +71,7 @@ const Home: NextPage = () => {
             />
           </div>
         </section>
-        {isLoading ? (
-          <div className="flex items-center justify-center">
-            <div className="relative h-16 w-16 animate-spin rounded-full bg-gradient-to-r from-indigo-400 via-blue-500 to-sky-400 ">
-              <div className="absolute top-1/2 left-1/2 h-12 w-12 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-white bg-[#e9e5cd]"></div>
-            </div>
-          </div>
-        ) : (
-          <BooksList booksList={data?.data?.data} />
-        )}
+        <AllBooks />
       </main>
     </>
   );
