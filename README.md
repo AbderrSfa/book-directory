@@ -1,12 +1,12 @@
-# book-directory
+# 📚 Book Directory
 
-## Backend
+## 🔌 Backend
 The backend uses Node.JS and Express.JS to run a server on port 4040. The data is kept in a postgres database running in a docker container.
 
-## Frontend
+## 🖼 Frontend
 The frontend was made using next.js and react, and styled with tailwindCSS.
 
-## Usage
+## ⚙️ Usage
 There is a Makefile in the root directory.
 - Run `make` to create the postgres database and install all npm packages for the frontend and backend.
 - Go to the api folder and run `npm run start` to start the backend.
