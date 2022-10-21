@@ -1,20 +1,29 @@
 import { Response, Request } from 'express';
-import { client } from '../db/database';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 const getAllBooks = async (req: Request, res: Response) => {
-	const data = await client.query('SELECT * FROM books ORDER BY title;');
-
-	res.status(200).json({ data: data.rows });
+	const data = await prisma.books.findMany();
+	console.log(data);
+	res.status(200).json({ data });
 };
 
 const searchForBook = async (req: Request, res: Response) => {
-	const { title } = req.params;
+	const { bookTitle } = req.params;
 
-	if (title) {
-		const data = await client.query(
-			`SELECT * FROM books WHERE UPPER(title) LIKE UPPER('%${title}%') ORDER BY title;`
-		);
-		res.status(200).json({ data: data.rows });
+	if (bookTitle) {
+		const data = await prisma.books.findMany({
+			where: {
+				title: {
+					contains: bookTitle,
+					mode: 'insensitive',
+				},
+			},
+			orderBy: {
+				title: 'asc',
+			},
+		});
+		res.status(200).json({ data });
 		return;
 	}
 	res.sendStatus(400);
