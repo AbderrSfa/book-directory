@@ -1,31 +1,45 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+
+import { AxiosResponse, AxiosError } from 'axios';
 
 import BooksList from '../components/BooksList';
-// import getData from "../helpers/fetchBooks";
 
 import { useQuery } from 'react-query';
 
 import BookT from '../typings/Book';
 
 import fetchBooks from '../helpers/fetchBooks';
-import AllBooks from '../components/AllBooks';
+
+interface Query {
+	isLoading: boolean;
+	isFetching: boolean;
+	data: AxiosResponse<any, any>;
+	isError: boolean;
+	error: AxiosError;
+	refetch: any;
+}
 
 const Home: NextPage = () => {
-	const [booksList, setBooksList] = useState<BookT[]>([]);
+	// const [booksList, setBooksList] = useState<BookT[]>([]);
 	const [search, setSearch] = useState('');
-	// const [showAll, setShowAll] = useState(false);
+
+	const { isLoading, isFetching, data, refetch, isError, error } = useQuery(
+		'book-list',
+		fetchBooks,
+		{ enabled: false },
+	) as Query;
 
 	// useEffect(() => {
-	//   async function getBooks() {
-	//     if (search.length <= 1) setBooksList([]);
-	//     if (search.length >= 2)
-	//       setBooksList(
-	//         await getData(`http://localhost:4040/api/books/${search}`)
-	//       );
-	//   }
-	//   getBooks();
+	// 	async function getBooks() {
+	// 		if (search.length <= 1) setBooksList([]);
+	// 		if (search.length >= 2)
+	// 			setBooksList(
+	// 				await getData(`http://localhost:4040/api/books/${search}`),
+	// 			);
+	// 	}
+	// 	getBooks();
 	// }, [search]);
 
 	return (
@@ -54,7 +68,7 @@ const Home: NextPage = () => {
 						</h1>
 						<button
 							className="m-auto my-4 block rounded-lg bg-[#553b08] py-2 px-4 text-white"
-							// onClick={() => setShowAll(true)}
+							onClick={refetch}
 						>
 							show all books
 						</button>
@@ -67,8 +81,19 @@ const Home: NextPage = () => {
 						/>
 					</div>
 				</section>
-				{/* {showAll && <AllBooks />} */}
-				<AllBooks />
+				<section>
+					{isLoading || isFetching ? (
+						<div className="flex items-center justify-center">
+							<div className="relative h-16 w-16 animate-spin rounded-full bg-gradient-to-r from-indigo-400 via-blue-500 to-sky-400 ">
+								<div className="absolute top-1/2 left-1/2 h-12 w-12 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-white bg-[#e9e5cd]"></div>
+							</div>
+						</div>
+					) : isError ? (
+						<p>{error.message}</p>
+					) : data ? (
+						<BooksList booksList={data?.data?.data} />
+					) : null}
+				</section>
 			</main>
 		</>
 	);
