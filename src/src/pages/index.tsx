@@ -1,35 +1,25 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
-
 import { AxiosResponse, AxiosError } from 'axios';
 
 import BooksList from '../components/BooksList';
-
-import { useQuery } from 'react-query';
-
-import BookT from '../typings/Book';
-
-import fetchBooks from '../helpers/fetchBooks';
-
-interface Query {
-	isLoading: boolean;
-	isFetching: boolean;
-	data: AxiosResponse<any, any>;
-	isError: boolean;
-	error: AxiosError;
-	refetch: any;
-}
+import useBookListData from '../hooks/useBookListData';
 
 const Home: NextPage = () => {
 	// const [booksList, setBooksList] = useState<BookT[]>([]);
 	const [search, setSearch] = useState('');
 
-	const { isLoading, isFetching, data, refetch, isError, error } = useQuery(
-		'book-list',
-		fetchBooks,
-		{ enabled: false },
-	) as Query;
+	const onError = (error: AxiosError) => {
+		console.log(error);
+	};
+
+	const onSuccess = (data: AxiosResponse) => {
+		console.log(data);
+	};
+
+	const { isLoading, isFetching, data, refetch, isError, error } =
+		useBookListData(onError, onSuccess);
 
 	// useEffect(() => {
 	// 	async function getBooks() {
@@ -89,9 +79,9 @@ const Home: NextPage = () => {
 							</div>
 						</div>
 					) : isError ? (
-						<p>{error.message}</p>
+						<p>An error occured {error.message}</p>
 					) : data ? (
-						<BooksList booksList={data?.data?.data} />
+						<BooksList booksList={data.data} />
 					) : null}
 				</section>
 			</main>
